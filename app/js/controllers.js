@@ -3,9 +3,9 @@
 /* Controllers */
 
 angular.module('myApp.controllers', [])
-    .controller('GreenhousesListController', ['$scope', "appSettings",
+    .controller('GreenhousesListController', ['$scope', '$timeout', 'appSettings',
 
-        function($scope, appSettings) {
+        function($scope, $timeout, appSettings) {
             /**
              * MQTT Initialization
              **/
@@ -16,7 +16,7 @@ angular.module('myApp.controllers', [])
             client.onConnectionLost = function(responseObject) {
                 if (responseObject.errorCode !== 0) {
                     console.log("onConnectionLost:" + responseObject.errorMessage);
-                    console.log("Reconnecting...")
+                    console.log("Reconnecting... [" + new Date() + "]");
                     client.connect({
                         onSuccess: function() {
                             client.subscribe(appSettings.topic_prefix + "+/actuators/#");
@@ -29,36 +29,53 @@ angular.module('myApp.controllers', [])
                 console.log(message);
 
                 var topic = message.destinationName;
-                var sensor = topic.substring(topic.lastIndexOf("/") + 1, topic.length);
-                //console.log("SENSOR: " + sensor);
-                if ($scope[sensor]) {
-                    $scope[sensor].value = message.payloadString;
-                    $scope[sensor].timestamp = dateFormat(new Date());
-                    $scope.$apply();
+                var topicFragments = topic.split('/');
+                // topicFragments[0] == {appSetting.topic_prefix}
+                // topicFragments[1] == {unique_id}
+                // topicFragments[2] == "actuators"
+                // topicFragments[3] == {actuatorName} (e.g. light)
+
+                var uniqueId = topicFragments[1];
+                var actuatorName = topicFragments[3];
+
+                // find the greenhouse with name == uniqueId
+                for (var i in $scope.greenhouses) {
+                    var greenhouse = $scope.greenhouses[i];
+                    if (greenhouse.name === uniqueId) {
+                        greenhouse.lightState = (message.payloadString === "1" ? "on" : "off");
+                        $scope.$apply();
+                        break;
+                    }
                 }
-                //console.log("onMessageArrived: "+message.destinationName +": " +message.payloadString);
             };
 
             client.connect({
                 onSuccess: function() {
                     $scope.addGreenhouse("benjamin");
                     $scope.addGreenhouse("maurice");
-                    $scope.addGreenhouse("ian");
-                    $scope.addGreenhouse("mike");
-                    $scope.$apply();
-
+                    // $scope.addGreenhouse("ian");
+                    // $scope.addGreenhouse("mike");
+                    // $scope.$apply();
                     client.subscribe(appSettings.topic_prefix + "+/actuators/#");
                 }
             });
 
-
             $scope.greenhouses = [];
 
             $scope.addGreenhouse = function(name) {
+                if (name === undefined) {
+                    var name = '54:52:00';
+
+                    for (var i = 0; i < 6; i++) {
+                        if (i % 2 === 0) name += ':';
+                        name += Math.floor(Math.random() * 16).toString(16);
+                    }
+                }
+
                 var greenhouse = {
                     name: name,
                     temperature: Math.floor((Math.random() * 10) + 20),
-                    light: true,
+                    //                    lightState: true,
                     refreshInterval: 2,
                 };
 
@@ -69,19 +86,15 @@ angular.module('myApp.controllers', [])
                         greenhouse.pulse = "blink2";
 
                     var message = new Messaging.Message("" + greenhouse.temperature);
-                    message.destinationName = appSettings.topic_prefix + greenhouse.name + "/temperature";
+                    message.destinationName = appSettings.topic_prefix + greenhouse.name + "/sensors/temperature";
                     client.send(message);
 
-                    greenhouse.timer = setTimeout(publishTemperatureRegularly, greenhouse.refreshInterval * 1000);
-
-                    $scope.$apply();
+                    greenhouse.timer = $timeout(publishTemperatureRegularly, greenhouse.refreshInterval * 1000);
                 }
 
                 publishTemperatureRegularly();
 
                 $scope.greenhouses.push(greenhouse);
             };
-
-
         }
     ]);

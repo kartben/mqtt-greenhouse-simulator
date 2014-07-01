@@ -1,42 +1,48 @@
-<p>There are currently {{greenhouses.length}} active greenhouses in your simulation</p>
+<!-- <p>There are currently {{greenhouses.length}} active greenhouses in your simulation</p> -->
 <div class="container">
 	<ul class="row" style="list-style:none;">
 		<li ng-repeat="greenhouse in greenhouses" class="col-md-4">
 			<div class="greenhouse">
 
-				<div id="greenhouse-pulse">
+				<div class="greenhouse-field" id="greenhouse-pulse">
 					<span class="glyphicon glyphicon-cloud-upload {{greenhouse.pulse}}"></span>
 				</div>
 
-				<div id="greenhouse-name">
+				<div class="greenhouse-field" id="greenhouse-name">
 					<label for="name_{{$index+1}}">Name:</label>
 					<input id="name_{{$index+1}}" type="text" class="form-control" ng-model="greenhouse.name" />
 				</div>
 				
-				<div id="greenhouse-temperature">
+				<div class="greenhouse-field" id="greenhouse-temperature">
 					<label for="temperature_{{$index+1}}">Temperature:</label>
 					<rzslider
 					id="temperature_{{$index+1}}"
 					rz-slider-floor="20"
 					rz-slider-ceil="30"
+					rz-slider-step="0.25"
+					rz-slider-precision="2"
 					rz-slider-model="greenhouse.temperature"></rzslider>
 				</div>
-				<div id="greenhouse-refreshInterval">
+				<div class="greenhouse-field" id="greenhouse-refreshInterval">
 					<label for="refreshInterval{{$index+1}}">Update interval (in sec):</label>
 					<rzslider
 					id="refreshInterval_{{$index+1}}"
-					rz-slider-floor="1"
-					rz-slider-ceil="30"
+					rz-slider-floor="0.2"
+					rz-slider-ceil="10.0"
+					rz-slider-step="0.2"
+					rz-slider-precision="1"
 					rz-slider-model="greenhouse.refreshInterval"></rzslider>
 				</div>
-				<div id="greenhouse-light">
+
+				<div class="greenhouse-field" id="greenhouse-light">
 					<label for="light_{{$index+1}}">Light state:</label>
-					<span id="light_{{$index+1}}" class="glyphicon glyphicon-certificate greenhouse_light_icon"></span>
+					<span id="light_{{$index+1}}" class="glyphicon glyphicon-certificate greenhouse_light_icon {{greenhouse.lightState}}"></span>
 				</div>
 			</div>
 		</li>
-		<li>
-			<div ng-click='addGreenhouse()' >Add a Greenhouse</div>
+
+		<li class="col-md-4">
+			<div ng-click='addGreenhouse()' class="greenhouse" id="add-greenhouse">Add a Greenhouse</div>
 		</li>
 	</ul>
 </div>
