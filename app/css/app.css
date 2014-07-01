@@ -46,6 +46,10 @@ rzslider span.bar {
   background: #0;
 }
 
+rzslider span.bubble {
+  color: black;
+}
+
 /** OTHER **/
 
 .greenhouse {
