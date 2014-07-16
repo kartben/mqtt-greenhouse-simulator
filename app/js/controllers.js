@@ -42,7 +42,7 @@ angular.module('myApp.controllers', [])
                 for (var i in $scope.greenhouses) {
                     var greenhouse = $scope.greenhouses[i];
                     if (greenhouse.name === uniqueId) {
-                        greenhouse.lightState = (message.payloadString === "1" ? "on" : "off");
+                        greenhouse.lightState = message.payloadString;
                         $scope.$apply();
                         break;
                     }
