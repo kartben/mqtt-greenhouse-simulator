@@ -1,8 +1,8 @@
 <!-- <p>There are currently {{greenhouses.length}} active greenhouses in your simulation</p> -->
 <div class="container">
 	<ul class="row" style="list-style:none; padding-left:0;">
-		<li ng-repeat="greenhouse in greenhouses" class="col-md-4">
-			<div class="greenhouse">
+		<li ng-repeat="greenhouse in greenhouse_simulators" class="col-md-4">
+			<div class="greenhouse simulator">
 
 				<div class="greenhouse-field" id="greenhouse-pulse">
 					<span class="glyphicon glyphicon-cloud-upload {{greenhouse.pulse}}"></span>
@@ -41,8 +41,35 @@
 			</div>
 		</li>
 
-		<li class="col-md-4">
-			<div ng-click='addGreenhouse()' class="greenhouse" id="add-greenhouse">Add a Greenhouse</div>
+		<li ng-repeat="greenhouse in greenhouse_remotes" class="col-md-4">
+			<div class="greenhouse remote">
+				<div class="greenhouse-field" id="greenhouse-name">
+					<label for="name_{{$index+1}}">Name:</label>
+					<input id="name_{{$index+1}}" type="text" class="form-control" ng-model="greenhouse.name" />
+				</div>
+
+				<div class="greenhouse-field" id="greenhouse-temperature">
+					<label for="temperature_{{$index+1}}">Temperature:</label>
+					<div ng-bind="greenhouse.temperature"/>
+				</div>
+
+				<div class="greenhouse-field" id="greenhouse-light">
+					<label for="light_{{$index+1}}">Light state:</label>
+					<span id="light_{{$index+1}}" class="glyphicon glyphicon-certificate greenhouse_light_icon {{greenhouse.lightState}}" ng-click="greenhouse.toggleLight()"></span>
+				</div>
+
+			</div>
 		</li>
+
+
+
+		<li class="col-md-4">
+			<div ng-click="addGreenhouseSimulator()" class="greenhouse" id="add-greenhouse">Add a Greenhouse Simulator</div>
+		</li>
+
+		<li class="col-md-4">
+			<div ng-click="addGreenhouseRemote()" class="greenhouse" id="add-greenhouse">Add a Greenhouse Remote</div>
+		</li>
+
 	</ul>
 </div>

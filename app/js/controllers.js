@@ -19,7 +19,7 @@ angular.module('myApp.controllers', [])
                     console.log("Reconnecting... [" + new Date() + "]");
                     client.connect({
                         onSuccess: function() {
-                            client.subscribe(appSettings.topic_prefix + "+/actuators/#");
+                            client.subscribe(appSettings.topic_prefix + "+/+/#");
                         }
                     });
                 }
@@ -38,44 +38,61 @@ angular.module('myApp.controllers', [])
                 var uniqueId = topicFragments[1];
                 var actuatorName = topicFragments[3];
 
-                // find the greenhouse with name == uniqueId
-                for (var i in $scope.greenhouses) {
-                    var greenhouse = $scope.greenhouses[i];
-                    if (greenhouse.name === uniqueId) {
-                        greenhouse.lightState = message.payloadString;
-                        $scope.$apply();
-                        break;
+                // simulators lookup to update light states
+                if (topicFragments[2] === "actuators") {
+                    for (var i in $scope.greenhouse_simulators) {
+                        var greenhouse = $scope.greenhouse_simulators[i];
+                        if (greenhouse.name === uniqueId) {
+                            if (topicFragments[3] === "light") {
+                                greenhouse.lightState = message.payloadString;
+                                // publish on sensors/light to acknowledge that
+                                // the state change is successful
+                                var message = new Messaging.Message(greenhouse.lightState);
+                                message.destinationName = appSettings.topic_prefix + greenhouse.name + "/sensors/light";
+                                client.send(message);
+                            }
+
+                            $scope.$apply();
+                            break;
+                        }
+                    }
+                }
+
+                // remotes lookup to update temperatures
+                if (topicFragments[2] === "sensors") {
+                    for (var i in $scope.greenhouse_remotes) {
+                        var greenhouse = $scope.greenhouse_remotes[i];
+                        if (greenhouse.name === uniqueId) {
+                            if (topicFragments[3] === "temperature") {
+                                greenhouse.temperature = message.payloadString;
+                            } else if (topicFragments[3] === "light") {
+                                greenhouse.lightState = message.payloadString;
+                            }
+
+                            $scope.$apply();
+                            break;
+                        }
                     }
                 }
             };
 
             client.connect({
                 onSuccess: function() {
-                    $scope.addGreenhouse("benjamin");
-                    $scope.addGreenhouse("maurice");
-                    // $scope.addGreenhouse("ian");
-                    // $scope.addGreenhouse("mike");
-                    // $scope.$apply();
-                    client.subscribe(appSettings.topic_prefix + "+/actuators/#");
+                    $scope.addGreenhouseSimulator("benjamin");
+
+                    client.subscribe(appSettings.topic_prefix + "+/+/#");
                 }
             });
 
-            $scope.greenhouses = [];
-
-            $scope.addGreenhouse = function(name) {
+            $scope.greenhouse_simulators = [];
+            $scope.addGreenhouseSimulator = function(name) {
                 if (name === undefined) {
-                    var name = '54:52:00';
-
-                    for (var i = 0; i < 6; i++) {
-                        if (i % 2 === 0) name += ':';
-                        name += Math.floor(Math.random() * 16).toString(16);
-                    }
+                    name = randomMAC();
                 }
 
                 var greenhouse = {
                     name: name,
                     temperature: Math.floor((Math.random() * 10) + 20),
-                    //                    lightState: true,
                     refreshInterval: 2,
                 };
 
@@ -94,7 +111,38 @@ angular.module('myApp.controllers', [])
 
                 publishTemperatureRegularly();
 
-                $scope.greenhouses.push(greenhouse);
+                $scope.greenhouse_simulators.push(greenhouse);
             };
+
+            $scope.greenhouse_remotes = [];
+            $scope.addGreenhouseRemote = function(name) {
+                if (name === undefined) {
+                    name = randomMAC();
+                }
+
+                var greenhouse = {
+                    name: name,
+                    toggleLight: function() {
+                        var message = new Messaging.Message((this.lightState === "on") ? "off" : "on");
+                        message.destinationName = appSettings.topic_prefix + this.name + "/actuators/light";
+                        client.send(message);
+                    }
+                };
+
+                $scope.greenhouse_remotes.push(greenhouse);
+            }
         }
+
     ]);
+
+// do not declare globally?
+function randomMAC() {
+    var name = '54:52:00';
+
+    for (var i = 0; i < 6; i++) {
+        if (i % 2 === 0) name += ':';
+        name += Math.floor(Math.random() * 16).toString(16);
+    }
+
+    return name;
+}

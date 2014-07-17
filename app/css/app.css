@@ -56,7 +56,14 @@ rzslider span.bubble {
   padding: 2em;
   margin: 1em;
   border-radius: 0.5em;
+}
+
+.simulator {
   background: #aef5a7;
+}
+
+.remote {
+  background: #d5f5a7;
 }
 
 .greenhouse-field {
