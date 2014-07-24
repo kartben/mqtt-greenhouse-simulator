@@ -50,8 +50,10 @@
 
 				<div class="greenhouse-field" id="greenhouse-temperature">
 					<label for="temperature_{{$index+1}}">Temperature:</label>
-					<div ng-bind="greenhouse.temperature"/>
+					<div ng-bind="greenhouse.temperature" class="{{greenhouse.pulse}}" />
 				</div>
+
+					
 
 				<div class="greenhouse-field" id="greenhouse-light">
 					<label for="light_{{$index+1}}">Light state:</label>
@@ -61,13 +63,11 @@
 			</div>
 		</li>
 
-
-
-		<li class="col-md-4">
+		<li class="col-md-4" ng-if="multi">
 			<div ng-click="addGreenhouseSimulator()" class="greenhouse" id="add-greenhouse">Add a Greenhouse Simulator</div>
 		</li>
 
-		<li class="col-md-4">
+		<li class="col-md-4" ng-if="multi">
 			<div ng-click="addGreenhouseRemote()" class="greenhouse" id="add-greenhouse">Add a Greenhouse Remote</div>
 		</li>
 

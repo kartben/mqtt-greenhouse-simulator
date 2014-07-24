@@ -19,6 +19,17 @@ config(['$routeProvider',
             templateUrl: 'partials/greenhouses-list.html',
             controller: 'GreenhousesListController'
         });
+
+        $routeProvider.when('/greenhouses/remote/:remoteName', {
+            templateUrl: 'partials/greenhouses-list.html',
+            controller: 'GreenhousesListController'
+        });
+
+        $routeProvider.when('/greenhouses/simulator/:simulatorName', {
+            templateUrl: 'partials/greenhouses-list.html',
+            controller: 'GreenhousesListController'
+        });
+
         $routeProvider.otherwise({
             redirectTo: '/greenhouses'
         });

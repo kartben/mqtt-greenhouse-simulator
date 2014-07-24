@@ -3,9 +3,14 @@
 /* Controllers */
 
 angular.module('myApp.controllers', [])
-    .controller('GreenhousesListController', ['$scope', '$timeout', 'appSettings',
+    .controller('GreenhousesListController', ['$scope', '$timeout', 'appSettings', '$http', '$routeParams',
 
-        function($scope, $timeout, appSettings) {
+        function($scope, $timeout, appSettings, $http, $routeParams) {
+            if (angular.isUndefined($routeParams.simulatorName) &&
+                angular.isUndefined($routeParams.remoteName)) {
+                $scope.multi = true;
+            }
+
             /**
              * MQTT Initialization
              **/
@@ -26,8 +31,6 @@ angular.module('myApp.controllers', [])
             };
 
             client.onMessageArrived = function(message) {
-                console.log(message);
-
                 var topic = message.destinationName;
                 var topicFragments = topic.split('/');
                 // topicFragments[0] == {appSetting.topic_prefix}
@@ -64,6 +67,10 @@ angular.module('myApp.controllers', [])
                         var greenhouse = $scope.greenhouse_remotes[i];
                         if (greenhouse.name === uniqueId) {
                             if (topicFragments[3] === "temperature") {
+                                if ("blink2" === greenhouse.pulse)
+                                    greenhouse.pulse = "blink";
+                                else
+                                    greenhouse.pulse = "blink2";
                                 greenhouse.temperature = message.payloadString;
                             } else if (topicFragments[3] === "light") {
                                 greenhouse.lightState = message.payloadString;
@@ -78,8 +85,12 @@ angular.module('myApp.controllers', [])
 
             client.connect({
                 onSuccess: function() {
-                    $scope.addGreenhouseSimulator("benjamin");
-
+                    $scope.$apply(function() {
+                        if (angular.isDefined($routeParams.simulatorName))
+                            $scope.addGreenhouseSimulator($routeParams.simulatorName);
+                        else if (angular.isDefined($routeParams.remoteName))
+                            $scope.addGreenhouseRemote($routeParams.remoteName);
+                    });
                     client.subscribe(appSettings.topic_prefix + "+/+/#");
                 }
             });
@@ -130,6 +141,7 @@ angular.module('myApp.controllers', [])
                 };
 
                 $scope.greenhouse_remotes.push(greenhouse);
+
             }
         }
 
