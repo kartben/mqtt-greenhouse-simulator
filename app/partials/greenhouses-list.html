@@ -36,7 +36,7 @@
 
 				<div class="greenhouse-field" id="greenhouse-light">
 					<label for="light_{{$index+1}}">Light state:</label>
-					<span id="light_{{$index+1}}" class="glyphicon glyphicon-certificate greenhouse_light_icon {{greenhouse.lightState}}"></span>
+					<span id="light_{{$index+1}}" class="glyphicon icon-lightbulb-1 greenhouse_light_icon {{greenhouse.lightState}}"></span>
 				</div>
 			</div>
 		</li>
@@ -50,14 +50,14 @@
 
 				<div class="greenhouse-field" id="greenhouse-temperature">
 					<label for="temperature_{{$index+1}}">Temperature:</label>
-					<div ng-bind="greenhouse.temperature" class="{{greenhouse.pulse}}" />
+					<div ng-bind="greenhouse.temperature" class="temperature {{greenhouse.pulse}}" />
 				</div>
 
 					
 
 				<div class="greenhouse-field" id="greenhouse-light">
 					<label for="light_{{$index+1}}">Light state:</label>
-					<span id="light_{{$index+1}}" class="glyphicon glyphicon-certificate greenhouse_light_icon {{greenhouse.lightState}}" ng-click="greenhouse.toggleLight()"></span>
+					<span id="light_{{$index+1}}" class="glyphicon icon-lightbulb-1 greenhouse_light_icon {{greenhouse.lightState}}" ng-click="greenhouse.toggleLight()"></span>
 				</div>
 
 			</div>

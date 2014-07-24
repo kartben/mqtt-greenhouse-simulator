@@ -78,7 +78,6 @@ rzslider span.bubble {
 }
 
 .greenhouse_light_icon {
-  color: lightgray;
   font-size: 2em;
   vertical-align: -.3em;
 }
@@ -86,6 +85,24 @@ rzslider span.bubble {
 .greenhouse_light_icon.on {
   color: yellow;
 }
+
+.remote label {
+  height: 3em;
+}
+
+.remote .greenhouse_light_icon {
+  font-size: 4em;
+  vertical-align: -0.9em;
+  float: right;
+}
+
+.remote .temperature {
+  font-family: monospace;
+  font-size: 3em;
+  float: right;
+  margin-top: -.2em;
+}
+
 
 #add-greenhouse {
   text-align: center;
