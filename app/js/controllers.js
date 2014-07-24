@@ -86,10 +86,13 @@ angular.module('myApp.controllers', [])
             client.connect({
                 onSuccess: function() {
                     $scope.$apply(function() {
-                        if (angular.isDefined($routeParams.simulatorName))
+                        if (angular.isDefined($routeParams.simulatorName)) {
                             $scope.addGreenhouseSimulator($routeParams.simulatorName);
-                        else if (angular.isDefined($routeParams.remoteName))
+                            $scope.simulatorName = $routeParams.simulatorName;
+                        } else if (angular.isDefined($routeParams.remoteName)) {
                             $scope.addGreenhouseRemote($routeParams.remoteName);
+                            $scope.remoteName = $routeParams.remoteName;
+                        }
                     });
                     client.subscribe(appSettings.topic_prefix + "+/+/#");
                 }
