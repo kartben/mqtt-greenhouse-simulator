@@ -17,7 +17,7 @@ angular.module('myApp.controllers', [])
 
             console.log(appSettings);
 
-            var client = new Messaging.Client("ws://iot.eclipse.org/ws", "clientId");
+            var client = new Messaging.Client("ws://iot.eclipse.org/ws", "gh-" + new Date().getTime());
             client.onConnectionLost = function(responseObject) {
                 if (responseObject.errorCode !== 0) {
                     console.log("onConnectionLost:" + responseObject.errorMessage);
