@@ -17,7 +17,7 @@ angular.module('myApp.controllers', [])
 
             console.log(appSettings);
 
-            var client = new Messaging.Client("ws://iot.eclipse.org/ws", "gh-" + new Date().getTime());
+            var client = new Paho.MQTT.Client("ws://iot.eclipse.org/ws", "gh-" + new Date().getTime());
             client.onConnectionLost = function(responseObject) {
                 if (responseObject.errorCode !== 0) {
                     console.log("onConnectionLost:" + responseObject.errorMessage);
@@ -50,7 +50,7 @@ angular.module('myApp.controllers', [])
                                 greenhouse.lightState = message.payloadString;
                                 // publish on sensors/light to acknowledge that
                                 // the state change is successful
-                                var message = new Messaging.Message(greenhouse.lightState);
+                                var message = new Paho.MQTT.Message(greenhouse.lightState);
                                 message.destinationName = appSettings.topic_prefix + greenhouse.name + "/sensors/light";
                                 client.send(message);
                             }
@@ -116,7 +116,7 @@ angular.module('myApp.controllers', [])
                     else
                         greenhouse.pulse = "blink2";
 
-                    var message = new Messaging.Message("" + greenhouse.temperature);
+                    var message = new Paho.MQTT.Message("" + greenhouse.temperature);
                     message.destinationName = appSettings.topic_prefix + greenhouse.name + "/sensors/temperature";
                     client.send(message);
 
@@ -137,7 +137,7 @@ angular.module('myApp.controllers', [])
                 var greenhouse = {
                     name: name,
                     toggleLight: function() {
-                        var message = new Messaging.Message((this.lightState === "on") ? "off" : "on");
+                        var message = new Paho.MQTT.Message((this.lightState === "on") ? "off" : "on");
                         message.destinationName = appSettings.topic_prefix + this.name + "/actuators/light";
                         client.send(message);
                     }
