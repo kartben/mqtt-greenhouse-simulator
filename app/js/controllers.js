@@ -52,6 +52,7 @@ angular.module('myApp.controllers', [])
                                 // the state change is successful
                                 var message = new Paho.MQTT.Message(greenhouse.lightState);
                                 message.destinationName = appSettings.topic_prefix + greenhouse.name + "/sensors/light";
+                                message.retained = true;
                                 client.send(message);
                             }
 
