@@ -12,6 +12,7 @@
         "angular-mocks": "~1.2.x",
         "html5-boilerplate": "~4.3.0",
         "angularjs-slider": "0.1.5",
-        "angular-ui-bootstrap": "0.11.0"
+        "angular-ui-bootstrap": "0.11.0",
+        "angular-socialshare": "0.0.2"
     }
 }

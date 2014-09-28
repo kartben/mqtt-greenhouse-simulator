@@ -11,10 +11,13 @@ angular.module('myApp', [
 
     'rzModule', // angularjs-slider
 
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'djds4rce.angular-socialshare'
 ]).
-config(['$routeProvider',
-    function($routeProvider) {
+config(['$routeProvider', '$locationProvider',
+    function($routeProvider, $locationProvider) {
+//        $locationProvider.html5Mode(true).hashPrefix('!');
+
         $routeProvider.when('/greenhouses', {
             templateUrl: 'partials/greenhouses-list.html',
             controller: 'GreenhousesListController'
@@ -33,5 +36,6 @@ config(['$routeProvider',
         $routeProvider.otherwise({
             redirectTo: '/greenhouses'
         });
+
     }
 ]);
