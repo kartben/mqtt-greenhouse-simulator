@@ -1,6 +1,6 @@
 # mqtt-greenhouse-simulator
 
-Simply run
+Simply run:
 
 ```
 npm start
