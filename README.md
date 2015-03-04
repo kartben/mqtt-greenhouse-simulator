@@ -7,6 +7,6 @@ npm start
 ```
 
 Then, open your web browser:
-* http://localhost:8000/app for simulating or controlling several greenhouses
-* http://localhost:8000/app/#/greenhouses/simulator/myGH for simulating the greenhouse with ID "myGH"
-* http://localhost:8000/app/#/greenhouses/remote/myGH for simulating the greenhouse with ID "myGH"
+* [http://localhost:8000/app](http://localhost:8000/app) for simulating or controlling several greenhouses
+* [http://localhost:8000/app/#/greenhouses/simulator/myGH](http://localhost:8000/app/#/greenhouses/simulator/myGH) for simulating the greenhouse with ID "myGH"
+* [http://localhost:8000/app/#/greenhouses/remote/myGH](http://localhost:8000/app/#/greenhouses/remote/myGH) for simulating the greenhouse with ID "myGH"
