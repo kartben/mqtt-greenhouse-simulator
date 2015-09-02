@@ -42,7 +42,7 @@
 		</li>
 
 		<li ng-repeat="greenhouse in greenhouse_remotes" class="col-md-4">
-			<div class="greenhouse remote">
+			<div class="greenhouse remote {{ greenhouse.motionState }}">
 				<div class="greenhouse-field" id="greenhouse-name">
 					<label for="name_{{$index+1}}">Name: {{ remoteName }}</label>
 					<input ng-if="multi" id="name_{{$index+1}}" type="text" class="form-control" ng-model="greenhouse.name" />

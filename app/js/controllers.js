@@ -75,6 +75,8 @@ angular.module('myApp.controllers', [])
                                 greenhouse.temperature = message.payloadString;
                             } else if (topicFragments[3] === "light") {
                                 greenhouse.lightState = message.payloadString;
+                            } else if (topicFragments[3] === "motion") {
+                                greenhouse.motionState = ((message.payloadString === "true") ? "motionDetected" : "");
                             }
 
                             $scope.$apply();

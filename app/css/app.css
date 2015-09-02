@@ -142,6 +142,12 @@ rzslider span.bubble {
     100% { color: black; }
 }
 
+@-webkit-keyframes motionAlarm {
+    0% { background: #d5f5a7;}
+    100% { background: red;}
+  //  100% { background: #d5f5a7;}
+}
+
 .blink {
     -webkit-animation: blink 0.5s linear ;
     -moz-animation: blink 0.5s linear ;
@@ -153,3 +159,11 @@ rzslider span.bubble {
     -moz-animation: blink2 0.5s linear ;
     animation: blink2  0.5s linear ;
 } 
+
+.motionDetected {
+  -webkit-animation: motionAlarm 0.5s infinite alternate;
+  -moz-animation: motionAlarm 0.5s infinite alternate;
+  -ms-animation: motionAlarm 0.5s infinite alternate;
+  -o-animation: motionAlarm 0.5s infinite alternate;
+  animation: motionAlarm 0.5s infinite alternate;
+}
