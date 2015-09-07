@@ -17,7 +17,20 @@ angular.module('myApp.controllers', [])
 
             console.log(appSettings);
 
-            var client = new Paho.MQTT.Client("ws://iot.eclipse.org/ws", "gh-" + new Date().getTime());
+            console.log($routeParams);
+
+            var brokerUri = "ws://iot.eclipse.org/ws";
+            if(angular.isDefined($routeParams.brokerHost)) {
+                brokerUri = "ws://" + $routeParams.brokerHost ;
+                if(angular.isDefined($routeParams.brokerPort)) {
+                    brokerUri += ":"+ $routeParams.brokerPort ;
+                }
+                brokerUri += "/ws" ;
+            }
+
+console.log(brokerUri);
+
+            var client = new Paho.MQTT.Client(brokerUri, "gh-" + new Date().getTime());
             client.onConnectionLost = function(responseObject) {
                 if (responseObject.errorCode !== 0) {
                     console.log("onConnectionLost:" + responseObject.errorMessage);
