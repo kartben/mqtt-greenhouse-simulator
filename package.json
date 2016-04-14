@@ -9,6 +9,7 @@
         "karma": "^0.13",
         "protractor": "^3.0.0",
         "http-server": "^0.8.0",
+        "live-server": "^0.9.2",
         "bower": "^1.7",
         "shelljs": "^0.5.3",
         "karma-junit-reporter": "^0.3.8"
@@ -17,7 +18,7 @@
         "postinstall": "bower install --config.interactive=false",
 
         "prestart": "npm install",
-        "start": "http-server -p 8000",
+        "start": "live-server --port=8000 app",
 
         "pretest": "npm install",
         "test": "karma start test/karma.conf.js",
